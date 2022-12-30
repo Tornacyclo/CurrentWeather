@@ -10,11 +10,15 @@ API_KEY = 'YOUR_API_KEY'
 query = 'copenhagen'
 
 
-response = requests.get(f'http://dataservice.accuweather.com/locations/v1/cities/search?apikey={API_KEY}&q={query}')
-if response.status_code == 200:
+try:
+    response = requests.get(f'http://dataservice.accuweather.com/locations/v1/cities/search?apikey={API_KEY}&q={query}')
+    response.raise_for_status()
     data = response.json()
     city = data[0]['Key']
     name = data[0]['LocalizedName']
+except requests.exceptions.HTTPError as err:
+    print(err)
+
 
 
 # Set the units to be used for temperature (either 'Imperial' or 'Metric')
